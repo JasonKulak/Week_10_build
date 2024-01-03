@@ -61,6 +61,63 @@ app.get("/", (req, res) => {
     res.send("Your server is running...better catch it")
 })
 
+app.get("/fruits/seed", async (req, res) => {
+    try {
+      // array of starter fruits
+      const startFruits = [
+        { name: "Orange", color: "orange", readyToEat: false },
+        { name: "Grape", color: "purple", readyToEat: false },
+        { name: "Banana", color: "orange", readyToEat: false },
+        { name: "Strawberry", color: "red", readyToEat: false },
+        { name: "Coconut", color: "brown", readyToEat: false },
+      ];
+  
+      // Delete All Fruits
+      await Fruit.deleteMany({});
+  
+      // Seed my starter fruits
+      const fruits = await Fruit.create(startFruits);
+  
+      // send fruits as response
+      res.json(fruits);
+    } catch (error) {
+      console.log(error.message);
+      res.send("There was error, read logs for error details");
+    }
+  });
+
+// Index Route Get -> /fruits
+app.get("/fruits", async (req, res) => {
+    try {
+      // get all fruits
+      const fruits = await Fruit.find({});
+      // render a template
+      // fruits/index.ejs = views/fruits/index.ejs
+      res.render("fruits/index.ejs", {fruits})
+    } catch (error) {
+      console.log("-----", error.message, "------");
+      res.status(400).send("error, read logs for details");
+    }
+  });
+
+  // The Show Route (Get to /fruits/:id)
+app.get("/fruits/:id", async (req, res) => {
+    try{
+        // get the id from params
+        const id = req.params.id
+
+        // find the particular fruit from the database
+        const fruit = await Fruit.findById(id)
+
+        // render the template with the fruit
+        res.render("fruits/show.ejs", {fruit})
+    }catch(error){
+        console.log("-----", error.message, "------")
+        res.status(400).send("error, read logs for details")
+    }
+})
+
+
 /////////////////
 //Server Listener
 /////////////////
