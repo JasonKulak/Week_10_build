@@ -100,7 +100,36 @@ app.get("/fruits", async (req, res) => {
     }
   });
 
-  // The Show Route (Get to /fruits/:id)
+//////////////////////////////////
+//NEW ROUTE - ABOVE THE SHOW ROUTE
+//////////////////////////////////
+
+app.get("/fruits/new", (req, res) => {
+    res.render("fruits/new.ejs")
+})
+
+////////////////////
+//CREATE ROUTE (post to /fruits)
+/////////////////////
+app.post("/fruits", async (req, res) => {
+    try{
+        //check if readyToEat should be true
+        // expression ? true : false (ternary operator)
+        req.body.readyToEat = req.body.readyToEat === "on" ? true : false
+        //create the fruit in the database
+        await Fruit.create(req.body)
+        // redirect back to main page
+        res.redirect("/fruits")
+    }catch(error){
+        console.log("---------", error.message, "--------")
+        res.status(400).send("error, read logs for details")
+        
+    }
+})
+
+
+
+// The Show Route (Get to /fruits/:id)
 app.get("/fruits/:id", async (req, res) => {
     try{
         // get the id from params
@@ -116,6 +145,7 @@ app.get("/fruits/:id", async (req, res) => {
         res.status(400).send("error, read logs for details")
     }
 })
+
 
 
 /////////////////
