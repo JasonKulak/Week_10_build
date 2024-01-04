@@ -6,6 +6,7 @@ const express = require("express") // our web framework
 const morgan = require("morgan") // our logger
 const methodOverride = require("method-override") // override forms
 const fruitController = require("./controllers/fruit")
+const userController = require("./controllers/user")
 
 /////////////////
 //Express App Object
@@ -20,6 +21,7 @@ app.use(methodOverride("_method")) //override form submissions
 app.use(express.urlencoded({extended: true})) // parse urlencoded bodies
 app.use(express.static("public")) //serve files from public folder
 app.use("/fruits", fruitController)
+app.use("/user", userController)
 
 ///////////////////////////
 //Routes
