@@ -9,6 +9,19 @@ const Fruit = require("../models/Fruit")
 ///////////////////
 const router = express.Router()
 
+//Middleware
+router.use((req, res, next) => {
+  console.table(req.session);
+
+  if (req.session.loggedIn) {
+    next();
+  } else {
+    res.redirect("/user/login");
+  }
+
+  
+});
+
 /////////////////
 //Routes
 /////////////////

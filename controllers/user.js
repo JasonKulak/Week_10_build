@@ -64,6 +64,11 @@ router.post("/login", async (req, res) => {
       if(!result){
           throw new Error("User Error: Password Doesn't Match")
       }
+
+      // save that the user is logged in in req.session
+      req.session.username = username
+      req.session.loggedIn = true
+
       // send them back to fruits
       res.redirect("/fruits")
     } catch (error) {
@@ -74,8 +79,10 @@ router.post("/login", async (req, res) => {
 
 // Logout Route (??? -> destroy the session)
 router.get("/logout", async (req, res) => {
-    res.send("logout")
-})
+    req.session.destroy((err) => {
+        res.redirect("/user/login")
+    })
+});
 
 
 /////////////////
