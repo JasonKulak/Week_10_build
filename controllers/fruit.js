@@ -52,17 +52,19 @@ router.get("/seed", async (req, res) => {
 
 // Index Route Get -> /fruits
 router.get("/", async (req, res) => {
-    try {
-      // get all fruits
-      const fruits = await Fruit.find({});
-      // render a template
-      // fruits/index.ejs = views/fruits/index.ejs
-      res.render("fruits/index.ejs", {fruits})
-    } catch (error) {
-      console.log("-----", error.message, "------");
-      res.status(400).send("error, read logs for details");
-    }
-  });
+  try {
+    // get username from req.session
+    const username = req.session.username
+    // get all fruits
+    const fruits = await Fruit.find({username});
+    // render a template
+    // fruits/index.ejs = ./views/fruits/index.ejs
+    res.render("fruits/index.ejs", { fruits });
+  } catch (error) {
+    console.log("-----", error.message, "------");
+    res.status(400).send("error, read logs for details");
+  }
+});
 
 //////////////////////////////////
 //NEW ROUTE - ABOVE THE SHOW ROUTE
@@ -80,6 +82,8 @@ router.post("/", async (req, res) => {
         //check if readyToEat should be true
         // expression ? true : false (ternary operator)
         req.body.readyToEat = req.body.readyToEat === "on" ? true : false
+        // add username to req.body from req.session
+        req.body.username = req.session.username
         //create the fruit in the database
         await Fruit.create(req.body)
         // redirect back to main page

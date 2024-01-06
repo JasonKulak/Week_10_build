@@ -16,7 +16,8 @@ const {Schema, model} = mongoose
 const fruitSchema = new Schema({
     name: String,
     color: String,
-    readyToEat: Boolean
+    readyToEat: Boolean,
+    username: String
 })
 
 //Model - object for interacting with the db
